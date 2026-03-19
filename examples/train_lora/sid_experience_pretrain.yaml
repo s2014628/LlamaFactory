@@ -1,0 +1,60 @@
+### SID Experience Pre-training Configuration
+###
+### Train a model to learn the mapping between SID tokens and experience data.
+###
+### Prerequisites:
+###   1. Expand model vocab with SID tokens using RQ-KMeans/expand_sid_vocab.py
+###   2. Convert memory_bank.json to PT format using RQ-KMeans/convert_to_pt.py:
+###        python convert_to_pt.py \
+###            --input ./memory_bank.json \
+###            --output /path/to/LlamaFactory/data/sid_experience_pt.jsonl \
+###            --text-field experience_summary \
+###            --dedup-by-sid
+###   3. Adjust model_name_or_path below to point to the expanded model directory
+###
+### Usage:
+###   llamafactory-cli train examples/train_lora/sid_experience_pretrain.yaml
+
+### model
+## Point to the expanded model directory (output of expand_sid_vocab.py)
+model_name_or_path: ./Qwen3-8B-SID
+trust_remote_code: true
+
+### method
+stage: pt
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_target: all
+
+### dataset
+dataset: sid_experience_pt
+cutoff_len: 4096
+preprocessing_num_workers: 16
+dataloader_num_workers: 4
+
+### output
+output_dir: saves/sid_pretrain/lora
+logging_steps: 10
+save_steps: 100
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-4
+num_train_epochs: 10.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+resume_from_checkpoint: null
+
+### eval (uncomment to enable validation)
+# val_size: 0.1
+# per_device_eval_batch_size: 1
+# eval_strategy: steps
+# eval_steps: 100
