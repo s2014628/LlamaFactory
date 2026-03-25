@@ -741,5 +741,11 @@
       "prompt": "content"
     },
     "folder": "python"
+  },
+  "sid_experience_pt": {
+    "file_name": "/data2/jxk/LlamaFactory/data/sid_experience_pt.jsonl",
+    "columns": {
+      "prompt": "text"
+    }
   }
 }
