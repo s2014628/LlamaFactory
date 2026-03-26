@@ -1,17 +1,22 @@
-### SID Experience Full Pre-training Configuration
+### SID Experience Mixed Pre-training Configuration
 ###
-### Train a model to learn the mapping between SID tokens and experience data.
+### Train a model to learn the mapping between SID tokens and experience data,
+### mixed with general corpus to prevent capability loss.
 ### Uses full parameter training (not LoRA) to properly learn SID token embeddings.
 ###
 ### Prerequisites:
 ###   1. Expand model vocab with SID tokens using RQ-KMeans/expand_sid_vocab.py
-###   2. Convert memory_bank.json to PT format using RQ-KMeans/convert_to_pt.py:
-###        python convert_to_pt.py \
+###   2. Generate augmented SID data using RQ-KMeans/augment_sid_pt.py:
+###        python augment_sid_pt.py \
 ###            --input ./memory_bank.json \
-###            --output /path/to/LlamaFactory/data/sid_experience_pt.jsonl \
-###            --text-field experience_summary \
-###            --dedup-by-sid
-###   3. Adjust model_name_or_path below to point to the expanded model directory
+###            --output /path/to/LlamaFactory/data/sid_augmented_pt.jsonl \
+###            --dedup-by-sid --shuffle
+###   3. Convert general corpus using RQ-KMeans/convert_general_corpus.py:
+###        python convert_general_corpus.py \
+###            --input 00000.txt 00001.txt 00003.txt \
+###            --output /path/to/LlamaFactory/data/general_corpus_pt.jsonl \
+###            --format json_array --field context
+###   4. Adjust model_name_or_path below to point to the expanded model directory
 ###
 ### Usage:
 ###   # 依赖: pip install -r requirements/deepspeed.txt
@@ -36,8 +41,12 @@ do_train: true
 deepspeed: examples/deepspeed/ds_z3_config.json
 
 ### dataset
-dataset: sid_experience_pt
-cutoff_len: 100
+## Mixed training: SID augmented data (70%) + general corpus (30%)
+## interleave_over ensures all SID data is used; general corpus is sampled at 30%
+dataset: sid_augmented_pt,general_corpus_pt
+mix_strategy: interleave_over
+interleave_probs: 0.7,0.3
+cutoff_len: 4096
 preprocessing_num_workers: 16
 dataloader_num_workers: 4
 finetuning_type: full

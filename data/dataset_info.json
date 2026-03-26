@@ -2,8 +2,17 @@
   "identity": {
     "file_name": "identity.json"
   },
-  "sid_experience_pt": {
-    "file_name": "sid_experience_pt.jsonl"
+  "sid_augmented_pt": {
+    "file_name": "sid_augmented_pt.jsonl",
+    "columns": {
+      "prompt": "text"
+    }
+  },
+  "general_corpus_pt": {
+    "file_name": "general_corpus_pt.jsonl",
+    "columns": {
+      "prompt": "text"
+    }
   },
   "alpaca_en_demo": {
     "file_name": "alpaca_en_demo.json"
