@@ -5,6 +5,12 @@
   "sid_experience_pt": {
     "file_name": "sid_experience_pt.jsonl"
   },
+  "sid_augmented_pt": {
+    "file_name": "sid_augmented_pt.jsonl"
+  },
+  "general_corpus_pt": {
+    "file_name": "general_corpus_pt.jsonl"
+  },
   "alpaca_en_demo": {
     "file_name": "alpaca_en_demo.json"
   },
