@@ -1,0 +1,64 @@
+### SID Experience SFT Configuration
+###
+### 用 SFT（指令微调）方式训练 SID token <-> 经验轨迹的双向映射。
+### 相比 PT 方式，SFT 的 loss 只计算在 output 部分，
+### 迫使模型关注 instruction 中的 SID token，学习信号更强。
+###
+### 数据格式（双向）：
+###   SID → 描述: instruction="Describe the experience trajectory for SID <SID...>."
+###               output="{经验轨迹描述}"
+###   描述 → SID: instruction="What is the SID corresponding to...?\n{描述}"
+###               output="<SID_L1_X><SID_L2_Y><SID_L3_Z>"
+###
+### Usage:
+###   FORCE_TORCHRUN=1 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \
+###     llamafactory-cli train examples/train_full/sid_experience_sft.yaml
+
+### model
+model_name_or_path: /data2/jxk/LlamaFactory/models/Qwen3-8B-SID
+trust_remote_code: true
+flash_attn: fa2
+disable_gradient_checkpointing: false
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+deepspeed: examples/deepspeed/ds_z3_config.json
+
+### dataset
+## memory_bank 双向SFT数据（权重85%）+ Nemotron通用数据（权重15%）
+## interleave_over 以较大的 memory_bank_sft 为基准，nemotron 数据循环补足
+dataset: memory_bank_sft,nemotron_general
+mix_strategy: interleave_over
+interleave_probs: 0.85,0.15
+cutoff_len: 2048
+preprocessing_num_workers: 16
+dataloader_num_workers: 4
+
+### output
+output_dir: saves/sid_sft/full/Qwen-8B-20260331
+logging_steps: 10
+save_steps: 999999      # 训练过程中不保存中间 checkpoint
+save_total_limit: 1     # 只保留最后一个（训练结束时）
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: true   # 只存模型权重，不存 optimizer state，节省约 43GB
+report_to: none
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 2.0e-5
+num_train_epochs: 5
+lr_scheduler_type: cosine
+warmup_ratio: 0.05
+bf16: true
+ddp_timeout: 180000000
+resume_from_checkpoint: null
+
+### eval（可选，取消注释以开启验证集）
+# val_size: 0.05
+# per_device_eval_batch_size: 2
+# eval_strategy: steps
+# eval_steps: 100

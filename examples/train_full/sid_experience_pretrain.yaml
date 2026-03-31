@@ -27,7 +27,7 @@
 
 ### model
 ## Point to the expanded model directory (output of expand_sid_vocab.py)
-model_name_or_path: /data2/jxk/LlamaFactory/models/Qwen3-4B-SID
+model_name_or_path: /data2/jxk/LlamaFactory/models/Qwen3-8B-SID
 trust_remote_code: true
 ## A800 / 支持 FA2 的 GPU 建议开启，省显存并加速 attention
 flash_attn: fa2
@@ -43,7 +43,7 @@ deepspeed: examples/deepspeed/ds_z3_config.json
 ### dataset
 ## Mixed training: SID augmented data (70%) + general corpus (30%)
 ## interleave_over ensures all SID data is used; general corpus is sampled at 30%
-dataset: sid_augmented_pt,general_corpus_pt
+dataset: sid_augmented_pt_20260327,general_corpus_pt
 mix_strategy: interleave_over
 interleave_probs: 0.7,0.3
 cutoff_len: 4096
@@ -51,9 +51,10 @@ preprocessing_num_workers: 16
 dataloader_num_workers: 4
 finetuning_type: full
 ### output
-output_dir: saves/sid_pretrain/full
+output_dir: saves/sid_pretrain/full/Qwen-8B-20260327
 logging_steps: 10
 save_steps: 100
+save_total_limit: 1
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
@@ -62,8 +63,8 @@ report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 ### train
 per_device_train_batch_size: 1
 gradient_accumulation_steps: 16
-learning_rate: 1.0e-4
-num_train_epochs: 10.0
+learning_rate: 1.0e-5
+num_train_epochs: 5
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true

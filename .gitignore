@@ -183,3 +183,8 @@ generated_predictions.jsonl
 predictions_score.json
 saves/
 models/
+*.json
+*.jsonl
+results_*.txt
+general-instruction-augmented-corpora/
+data/general-instruction-augmented-corpora/

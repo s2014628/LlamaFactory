@@ -756,5 +756,35 @@
     "columns": {
       "prompt": "text"
     }
+  },
+  "sid_augmented_pt_20260327": {
+    "file_name": "/data2/jxk/LlamaFactory/data/sid_augmented_pt_20260327.jsonl",
+    "columns": {
+      "prompt": "text"
+    }
+  },
+  "augment_sft": {
+    "file_name": "/data2/jxk/LlamaFactory/data/augment_sft.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "nemotron_general": {
+    "file_name": "/data2/jxk/LlamaFactory/data/nemotron_sampled.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "memory_bank_sft": {
+    "file_name": "/data2/jxk/LlamaFactory/data/memory_bank_sft.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
   }
 }
