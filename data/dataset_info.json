@@ -786,5 +786,37 @@
       "query": "input",
       "response": "output"
     }
+  },
+  "memory_bank_sft_train": {
+    "file_name": "/data2/jxk/LlamaFactory/data/memory_bank_sft_train.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "memory_bank_sft_test": {
+    "file_name": "/data2/jxk/LlamaFactory/data/memory_bank_sft_test.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "mem_retriever_react_sft": {
+    "file_name": "mem_retriever_react_sft.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "system": "system"
+    }
+  },
+  "mem_retriever_react_sft_v2": {
+    "file_name": "mem_retriever_react_sft_v2.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "tools": "tools"
+    }
   }
 }

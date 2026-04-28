@@ -1,0 +1,38 @@
+### MemRetriever ReAct SFT
+### 教模型：query → think → tool_call(SID) → tool_response → think → answer
+### 在 sid_sft 基础上继续微调，只训格式，不训SID值的选择（那是RL的事）
+
+### model
+model_name_or_path: /data2/jxk/LlamaFactory/saves/sid_sft/full/Qwen-8B-20260331
+trust_remote_code: true
+flash_attn: fa2
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+deepspeed: examples/deepspeed/ds_z3_config.json
+
+### dataset
+dataset: mem_retriever_react_sft_v2
+cutoff_len: 2048
+preprocessing_num_workers: 8
+
+### output
+output_dir: saves/mem_retriever_react_sft_v2/full/Qwen-8B
+logging_steps: 10
+save_steps: 999999
+save_total_limit: 1
+overwrite_output_dir: true
+save_only_model: true
+report_to: none
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 5.0e-6
+num_train_epochs: 2
+lr_scheduler_type: cosine
+warmup_ratio: 0.05
+bf16: true
+ddp_timeout: 180000000

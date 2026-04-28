@@ -8,7 +8,7 @@ import json
 import random
 from pathlib import Path
 
-INPUT_PATH = "/data2/jxk/RQ-KMeans/rqkmeans_8k_512_256_128/memory_bank.json"
+INPUT_PATH = "/data2/jxk/RQ-KMeans/rqkmeans_8k_64_32_16/memory_bank.json"
 OUTPUT_PATH = "/data2/jxk/LlamaFactory/data/memory_bank_sft.json"
 
 FORWARD_INSTRUCTIONS = [
